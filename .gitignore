@@ -1,0 +1,10 @@
+# Only track the template — project instances are local working copies
+/*
+!/_template
+!/README.md
+!/.gitignore
+
+# OS
+.DS_Store
+*.swp
+*~
