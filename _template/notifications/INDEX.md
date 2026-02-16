@@ -5,38 +5,45 @@ Simple audio feedback for three key moments:
 - **Tasks** complete successfully
 - **Errors** occur that need attention
 
+Works in **web interfaces** (browsers, HTML files) and **local terminal** (macOS).
+
 ## Files
 
 | File | Purpose |
 |------|---------|
-| **notification-sounds.js** | Core module — generates notification tones using Web Audio API |
-| **README.md** | Complete documentation, usage guide, API reference |
-| **INTEGRATION.md** | How to integrate sounds into different parts of Claude |
-| **EXAMPLES.md** | Code patterns for real-world integration |
+| **notification-sounds.js** | Web module — loads custom audio files |
+| **claude-monitor.sh** | Watch Claude CLI output, auto-trigger notifications |
+| **notify.sh** | Bash script for manual terminal notifications |
+| **notify.js** | Node.js CLI for manual terminal notifications |
+| **README.md** | Complete documentation, usage guide |
+| **INTEGRATION.md** | How to integrate sounds into web apps |
+| **EXAMPLES.md** | Code patterns for real-world usage |
+| **TERMINAL.md** | How to use sounds in your local terminal |
 
 ## Quick Start
 
-### 1. In HTML Templates
+### 1. In HTML/Browser
 ```html
-<!-- Include the module -->
-<script src="../_template/notifications/notification-sounds.js"></script>
-
-<!-- Use it -->
+<script src="../notifications/notification-sounds.js"></script>
 <script>
-  NotificationSounds.play('task-complete');       // Success
-  NotificationSounds.play('question-pending');    // Need input
-  NotificationSounds.play('error');               // Something wrong
-  NotificationSounds.play('task-started');        // Optional: task started
+  NotificationSounds.play('question-pending');  // Need input
+  NotificationSounds.play('task-complete');     // Task done
+  NotificationSounds.play('error');             // Something wrong
 </script>
 ```
 
-### 2. In Node.js / Task Execution
-```javascript
-const NotificationSounds = require('./_template/notifications/notification-sounds.js');
+### 2. In Terminal (macOS)
+```bash
+# One-time setup
+alias notify='~/.../notifications/notify.sh'
 
-// Play when task finishes
-NotificationSounds.play('task-complete');
+# Use from anywhere
+notify question-pending
+notify task-complete
+notify error
 ```
+
+See [TERMINAL.md](./TERMINAL.md) for complete terminal setup.
 
 ## Three Core Notifications
 
@@ -46,12 +53,21 @@ NotificationSounds.play('task-complete');
 | `task-complete` | Task finished | KH_Complete.mp3 |
 | `error` | Error/warning | KH_ErrorSelect.mp3 |
 
-## Design Principles
+## Custom Audio Files
 
-- **Subtle**: Volumes kept low (0.2–0.3) to enhance without startling
-- **Distinct**: Each sound is unique and immediately recognizable
-- **Meaningful**: Sound type matches semantic meaning of event
-- **Optional**: All sounds can be muted via `NotificationSounds.setMuted(true)`
+Your notification sounds use professional Keyman audio files:
+- **KH_PendingQuestion.mp3** — Question notification
+- **KH_Complete.mp3** — Success notification
+- **KH_ErrorSelect.mp3** — Error notification
+
+Stored in `sounds/` directory, ready to use.
+
+## See Also
+
+- [README.md](./README.md) — Full documentation
+- [INTEGRATION.md](./INTEGRATION.md) — Web app integration
+- [EXAMPLES.md](./EXAMPLES.md) — Code examples
+- [TERMINAL.md](./TERMINAL.md) — Terminal setup guide
 
 ## Integration Points
 
