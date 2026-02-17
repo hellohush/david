@@ -12,13 +12,6 @@
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 SOUNDS_DIR="$SCRIPT_DIR/sounds"
 
-# Sound file mappings
-declare -A SOUNDS=(
-  ["question-pending"]="KH_PendingQuestion.mp3"
-  ["task-complete"]="KH_Complete.mp3"
-  ["error"]="KH_ErrorSelect.mp3"
-)
-
 # Check if sound type is provided
 if [ -z "$1" ]; then
   echo "Usage: notify <type>"
@@ -32,14 +25,18 @@ fi
 
 SOUND_TYPE="$1"
 
-# Check if sound type exists
-if [ -z "${SOUNDS[$SOUND_TYPE]}" ]; then
-  echo "Error: Unknown notification type '$SOUND_TYPE'"
-  echo "Available types: ${!SOUNDS[@]}"
-  exit 1
-fi
+# Map sound type to file (compatible with bash 3.2+)
+case "$SOUND_TYPE" in
+  question-pending) SOUND_FILE="KH_PendingQuestion.mp3" ;;
+  task-complete)    SOUND_FILE="KH_Complete.mp3" ;;
+  error)            SOUND_FILE="KH_ErrorSelect.mp3" ;;
+  *)
+    echo "Error: Unknown notification type '$SOUND_TYPE'"
+    echo "Available types: question-pending task-complete error"
+    exit 1
+    ;;
+esac
 
-SOUND_FILE="${SOUNDS[$SOUND_TYPE]}"
 SOUND_PATH="$SOUNDS_DIR/$SOUND_FILE"
 
 # Check if sound file exists
